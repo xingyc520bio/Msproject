@@ -2,7 +2,7 @@ import requests
 from datetime import datetime, timedelta
 
 db = "nucleotide"
-term = "Enterovirus D68[Organism] AND 'VP1'[All Fields]"
+term = "Enterovirus D68[Organism]"
 rettype = "xml"
 retmode = "xml"
 tool = "xingyc0714@gmail.com"

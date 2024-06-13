@@ -1,3 +1,5 @@
+# Using API for the Latest Genome 
+### (from 2022.6-2024.6)
 First, this is the code for searching the API of D68 Genome and VP1 using Python, I used Chinese annotation which is easy for me.
 
 ```python
@@ -7,7 +9,7 @@ from datetime import datetime, timedelta
 
 # 设置搜索参数
 db = "nucleotide"  # 搜索数据库
-term = "Enterovirus D68[Organism] AND 'VP1'[All Fields]"  # 搜索术语
+term = "Enterovirus D68[Organism]"  # 搜索术语
 rettype = "xml"  # 返回数据格式
 retmode = "xml"  # 返回模式
 tool = "xingyc0714@gmail.com"  # 你的工具名称或邮箱，用于 API 记录
@@ -34,13 +36,14 @@ else:
 # 请注意，这个脚本仅用于演示如何构造请求和获取响应。
 # 实际的数据处理和序列检索需要进一步的逻辑来解析 XML 并使用 efetch.fcgi 获取序列数据。
  ```
-去掉脚本就是
+
+Only script with no Annotation be like:
  ```python
 import requests
 from datetime import datetime, timedelta
 
 db = "nucleotide"
-term = "Enterovirus D68[Organism] AND 'VP1'[All Fields]"
+term = "Enterovirus D68[Organism]"
 rettype = "xml"
 retmode = "xml"
 tool = "xingyc0714@gmail.com"
@@ -59,3 +62,40 @@ else:
     print("Failed to retrieve data:", response.status_code)
 
  ```
+<br />I run it on the conda and get this one:
+
+<img width="940" alt="image" src="https://github.com/xingyc520bio/Msproject/assets/49332831/2d52477d-e9d0-4bd6-b613-e946e90e1700">
+
+<br />
+
+## XML Result Analysis from NCBI E-utilities eSearch Service
+
+The XML result provided is a response from the NCBI E-utilities' eSearch service, which includes the search for records related to Enterovirus D68 (EV-D68). Below is the analysis of the results:
+
+### Search Result Count
+- The search returned **5751 records**, indicating that there are a considerable number of entries related to Enterovirus D68.
+
+### Return Result Settings
+- `<RetMax>` is set to **20**, meaning this query can return up to 20 records at a time.
+- `<RetStart>` is set to **0**, indicating that the returned records start from the first item.
+
+### Query Key
+- A `QueryKey` with a value of **1** is used to reference this specific set of search results in subsequent operations, such as eFetch.
+
+### Web Environment
+- A `WebEnv` identifier is provided, which may be used for session management on the NCBI website.
+
+### List of Record IDs
+- A list of **20 specific record IDs** are presented, which are the unique identifiers for the records returned in the search results.
+
+### Translation Set
+- The original search term "Enterovirus D68[Organism]" was translated to "*enterovirus D68*"[Organism], and the search was conducted within the "Organism" field.
+- The `<TermSet>` tag shows the specific search term and field, `<Count>` shows the number of records found, and `<Explode>Y</Explode>` indicates that the search term was broken down into separate items for the search.
+
+### Query Translation
+- It shows the final search query, which is "*enterovirus D68*"[Organism], indicating that the search was conducted on the "Organism" field.
+
+### Error and Warning List
+- This XML result does not have `<ErrorList>` or `<WarningList>` tags, indicating that there were no issues or warnings with the search.
+
+This result indicates that your search was successful. You can use the returned record IDs to obtain more information, such as using the eFetch service to retrieve sequence data or summary information. If you need to further manipulate this data, you can write a script to parse this XML file and use the IDs in the `<IdList>` for subsequent API calls.

@@ -98,4 +98,4 @@ The XML result provided is a response from the NCBI E-utilities' eSearch service
 ### Error and Warning List
 - This XML result does not have `<ErrorList>` or `<WarningList>` tags, indicating that there were no issues or warnings with the search.
 
-This result indicates that your search was successful. You can use the returned record IDs to obtain more information, such as using the eFetch service to retrieve sequence data or summary information. If you need to further manipulate this data, you can write a script to parse this XML file and use the IDs in the `<IdList>` for subsequent API calls.
+This result indicates that my search was successful. But I think 5751 result is beyond my expectation.

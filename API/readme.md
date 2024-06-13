@@ -10,7 +10,7 @@ db = "nucleotide"  # 搜索数据库
 term = "Enterovirus D68[Organism] AND 'VP1'[All Fields]"  # 搜索术语
 rettype = "xml"  # 返回数据格式
 retmode = "xml"  # 返回模式
-tool = "your_email@example.com"  # 你的工具名称或邮箱，用于 API 记录
+tool = "xingyc0714@gmail.com"  # 你的工具名称或邮箱，用于 API 记录
 
 # 计算两年前的日期
 two_years_ago = (datetime.now() - timedelta(days=730)).strftime('%Y-%m-%d')

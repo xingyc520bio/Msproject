@@ -175,3 +175,40 @@ Here is the result I obtained:
 <img width="943" alt="image" src="https://github.com/xingyc520bio/Msproject/assets/49332831/20405269-40f9-4d90-9d9a-4ec6ea80acbb">
 
 It's quite strange that I still got 5,751 matching items.
+
+I tried the other way which is adding “complete genome”. The code is as followed:
+
+```python
+import requests
+
+db = "nucleotide"
+# 添加了 "complete genome" 术语
+term = "Enterovirus D68[Organism] AND complete genome"
+rettype = "xml"
+retmode = "xml"
+tool = "xingyc0714@gmail.com"  
+
+
+# 设置日期范围
+start_date = "2022-06-01"
+end_date = "2024-09-30"
+date_filter = f"sdate[{start_date}+TO+{end_date}]"
+
+# 构建搜索 URL
+search_url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db={db}&term={term}&rettype={rettype}&retmode={retmode}&daterange={date_filter}&filter={length_filter}&usehistory=y&tool={tool}"
+
+# 发送请求
+response = requests.get(search_url)
+
+# 检查响应状态
+if response.status_code == 200:
+    xml_response = response.text
+    print(xml_response)
+else:
+    print("Failed to retrieve data:", response.status_code)
+```
+This is what I get this time:
+
+<img width="942" alt="image" src="https://github.com/xingyc520bio/Msproject/assets/49332831/65b57fc1-100f-409b-a9c9-1bec64ac3913">
+
+Still 5752 results.

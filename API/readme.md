@@ -99,3 +99,79 @@ The XML result provided is a response from the NCBI E-utilities' eSearch service
 - This XML result does not have `<ErrorList>` or `<WarningList>` tags, indicating that there were no issues or warnings with the search.
 
 This result indicates that my search was successful. But I think 5751 result is beyond my expectation.
+
+## Adjustment
+-Based on the feedback, I used the field [SLEN] to adjust the query because the genome of the virus is approximately 7.3kb, so my query range is 7.0-7.5kb. This field allows me to select to limit the results to a specific sequence length. 
+
+-I gave it a try, but conda gave me an error response. I suspect that the NCBI's esearch.fcgi interface does not support the direct use of [SLEN] as a filter key. In NCBI searches, the filter for sequence length should use the sizerange parameter. Additionally, the format of the filter needs to be adjusted to ensure it is correctly parsed.
+
+<img width="504" alt="image" src="https://github.com/xingyc520bio/Msproject/assets/49332831/b0954a43-0562-4fc5-98da-625fdde0e6f2">
+
+
+
+```python
+import requests
+
+db = "nucleotide"
+term = "Enterovirus D68[Organism]"
+rettype = "xml"
+retmode = "xml"
+tool = "xingyc0714@gmail.com"
+
+# 设置序列长度范围为7000到7500个碱基对
+min_length = 7000
+max_length = 7500
+
+# 构建序列长度过滤器
+length_filter = f"sizerange:{min_length}+{max_length}"
+
+# 设置日期范围
+start_date = "2022-06-01"
+end_date = "2024-09-30"
+date_filter = f"sdate[{start_date}+TO+{end_date}]"
+
+# 构建搜索 URL
+search_url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db={db}&term={term}&rettype={rettype}&retmode={retmode}&daterange={date_filter}&filter={length_filter}&usehistory=y&tool={tool}"
+
+# 发送请求
+response = requests.get(search_url)
+
+# 检查响应状态
+if response.status_code == 200:
+    xml_response = response.text
+    print(xml_response)
+else:
+    print("Failed to retrieve data:", response.status_code)
+```
+```python
+import requests
+
+db = "nucleotide"
+term = "Enterovirus D68[Organism]"
+rettype = "xml"
+retmode = "xml"
+tool = "xingyc0714@gmail.com"
+
+min_length = 7000
+max_length = 7500
+
+length_filter = f"sizerange:{min_length}+{max_length}"
+
+start_date = "2022-06-01"
+end_date = "2024-09-30"
+date_filter = f"sdate[{start_date}+TO+{end_date}]"
+
+search_url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db={db}&term={term}&rettype={rettype}&retmode={retmode}&daterange={date_filter}&filter={length_filter}&usehistory=y&tool={tool}"
+
+response = requests.get(search_url)
+
+if response.status_code == 200:
+    xml_response = response.text
+    print(xml_response)
+else:
+    print("Failed to retrieve data:", response.status_code)
+```
+Here is the result I obtained:
+<img width="943" alt="image" src="https://github.com/xingyc520bio/Msproject/assets/49332831/20405269-40f9-4d90-9d9a-4ec6ea80acbb">
+
+It's quite strange that I still got 5,751 matching items.

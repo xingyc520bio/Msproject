@@ -211,4 +211,8 @@ This is what I get this time:
 
 <img width="942" alt="image" src="https://github.com/xingyc520bio/Msproject/assets/49332831/65b57fc1-100f-409b-a9c9-1bec64ac3913">
 
-Still 5751 results.
+
+It's quite peculiar that the result this time seems to be correct. The number 5751 in the search results is not the number of results returned by the current search, but rather the number of results retrieved in a previous search step. In the XML results, the actual number of search results is 735, which can be seen from the 735 tag.
+
+
+The translation set shows 5751, which may be because the "Enterovirus D68[Organism]" term was expanded to include all related subitems in the search due to Explode=Y in the translation stack, resulting in a count of 5751. After I added the search condition "complete[All Fields] AND genome[All Fields]", the actual number of search results was reduced to 735. So there should be 735 genomic results, and I'm not sure if this is correct.

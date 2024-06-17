@@ -284,3 +284,66 @@ else:
 ### Final Results
 
 The ultimate outcome is the `result.txt` file, which displays parts of the sequences. For instance, sequences like Sequence 1 and Sequence 2 have very accurate lengths, being over 7,300 or 7,500 kilobases (kb), which should correspond to the genome. However, some are quite short, such as the third sequence, which only has a few hundred kilobases, leading to the suspicion that it might be just a part of a gene. Therefore, I am very uncertain whether this has been successful, and 735 results are still too many.
+
+### Adjustment of the `term` Parameter
+
+Here, we employ the previous `import.py` to inspect our search results.
+
+#### 1. Change Method
+First, we adopt the parameters suggested by Eero: `enterovirus D68[Organism] AND ((("full" OR "complete") AND "genome") OR 7000:7500[SLEN])`. The Python code is as follows:
+
+```python
+term = "enterovirus D68[Organism] AND (((\"full\" OR \"complete\") AND \"genome\") OR 7000:7500[SLEN])"
+```
+The results obtained are as follows: 
+<img width="932" alt="image" src="https://github.com/xingyc520bio/Msproject/assets/49332831/ff7c1cbf-de85-4517-bc02-c7686f82f63e">
+There are 2,461,407 results, which even include protein sequences. I believe the main reason is that the use of "OR" is not appropriate; it should be "AND". Otherwise, they will include all sequences with lengths between 7000 and 7500.
+
+#### 2. Modify the Connector
+We will change the connector from "OR" to "AND" in the above criteria, that is:
+```python
+term = "enterovirus D68[Organism] AND (((\"full\" OR \"complete\") AND \"genome\") AND 7000:7500[SLEN])"
+```
+The results obtained are as follows:
+<img width="940" alt="image" src="https://github.com/xingyc520bio/Msproject/assets/49332831/05f5ed07-35dc-4348-a906-72c9ba687aea">
+There are 734 results, only one less than what we obtained last time.
+
+#### 3. Remove the [SLEN] condition. 
+I considered whether removing the SLEN condition would yield the same results as those from Friday. Thus, I obtained the following code:
+
+```python
+term = "enterovirus D68[Organism] AND (((\"full\" OR \"complete\") AND \"genome\")"
+```
+Result obtained: 
+<img width="936" alt="image" src="https://github.com/xingyc520bio/Msproject/assets/49332831/1e36a932-92b5-471e-afa0-71a6ce2cb3c9">
+There are still 735 results, which are exactly the same as the results from Friday.
+
+Therefore, we adjust the final code to be:
+ ```python
+import requests
+
+db = "nucleotide"
+term = "enterovirus D68[Organism] AND (((\"full\" OR \"complete\") AND \"genome\") AND 7000:7500[SLEN])"
+rettype = "xml"
+retmode = "xml"
+tool = "xingyc0714@gmail.com"
+
+min_length = 7000
+max_length = 7500
+
+length_filter = f"sizerange:{min_length}+{max_length}"
+
+start_date = "2022-06-01"
+end_date = "2024-09-30"
+date_filter = f"sdate[{start_date}+TO+{end_date}]"
+
+search_url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db={db}&term={term}&rettype={rettype}&retmode={retmode}&daterange={date_filter}&filter={length_filter}&usehistory=y&tool={tool}"
+
+response = requests.get(search_url)
+
+if response.status_code == 200:
+    xml_response = response.text
+    print(xml_response)
+else:
+    print("Failed to retrieve data:", response.status_code)
+```

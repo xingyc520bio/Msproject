@@ -22,7 +22,7 @@ driver = webdriver.Chrome(options=options)
 
 4. **Open the NCBI search results page:**
 ```python
-search_url = 'https://www.ncbi.nlm.nih.gov/search/?term=your_search_term'
+search_url = 'https://www.ncbi.nlm.nih.gov/search/enterovirus D68[Organism] AND ((("full" OR "complete") AND "genome") AND 7000:7500[SLEN]) '
 driver.get(search_url)
 sleep(3)  # Wait for the page to load
 ```
